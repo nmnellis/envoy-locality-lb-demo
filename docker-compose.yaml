@@ -1,0 +1,63 @@
+version: "3.7"
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.22.6
+    command:
+      - envoy
+      - --config-path
+      - /etc/config/1-envoy-localitylb.yaml
+    volumes:
+      - ./config/:/etc/config/
+    networks:
+      - envoymesh
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+
+  endpoint1:
+    image: ghcr.io/nmnellis/istio-echo:latest
+    command:
+    - --name
+    - endpoint1
+    - --port
+    - "8080"
+    networks:
+      envoymesh:
+        aliases:
+          - endpoint1
+  endpoint2:
+    image: ghcr.io/nmnellis/istio-echo:latest
+    command:
+    - --name
+    - endpoint2
+    - --port
+    - "8080"
+    networks:
+      envoymesh:
+        aliases:
+          - endpoint2
+  endpoint3:
+    image: ghcr.io/nmnellis/istio-echo:latest
+    command:
+    - --name
+    - endpoint3
+    - --port
+    - "8080"
+    networks:
+      envoymesh:
+        aliases:
+          - endpoint3
+  endpoint4:
+    image: ghcr.io/nmnellis/istio-echo:latest
+    command:
+    - --name
+    - endpoint4
+    - --port
+    - "8080"
+    networks:
+      envoymesh:
+        aliases:
+          - endpoint4
+
+networks:
+  envoymesh: {}
